@@ -77,15 +77,15 @@ double PID::ReturnSteerValue() {
 double PID::ReturnTrottleValue() {
   double trottle;
   
-  trottle = ((1/fabs(fmax(p_error, 0.001))) ) - 0.15 ;
+  trottle = (-0.3*(fabs(p_error))) + 1.1 ;
   
-  if (fabs(trottle)>1.0){
+  /*if (fabs(trottle)>1.0){
     if (trottle > 0){
       trottle = 1.0;
     } else {
       trottle = -1.0;
     }
-  }
+  }*/
   return trottle;
 }
 

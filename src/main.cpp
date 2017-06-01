@@ -35,7 +35,7 @@ int main()
   PID pid;
   
   // Init PID Controller with parameters
-  double Kp = 0.2;
+  double Kp = 0.105;
   double Kd = 0.035;
   double Ki = 0.005;
   
