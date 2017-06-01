@@ -2,21 +2,29 @@
 #define PID_H
 
 class PID {
-public:
+private:
+  double previous_time;
+  bool time_init_done;
+  double previous_cte;
+  double cte_min;
+  double cte_max;
+  
   /*
-  * Errors
-  */
+   * Errors
+   */
   double p_error;
   double i_error;
   double d_error;
-
+  
   /*
-  * Coefficients
-  */ 
+   * Coefficients
+   */
   double Kp;
   double Ki;
   double Kd;
 
+public:
+  
   /*
   * Constructor
   */
@@ -38,9 +46,24 @@ public:
   void UpdateError(double cte);
 
   /*
-  * Calculate the total PID error.
+  * Calculate the total PID error -> SteerValue.
   */
-  double TotalError();
+  double ReturnSteerValue();
+  
+  /*
+   * Calculate the total P error and modifies it -> TrottleValue.
+   */
+  double ReturnTrottleValue();
+  
+  /*
+   * TODO
+   */
+  double ReturnCteMin();
+  
+  /*
+   * TODO
+   */
+  double ReturnCteMax();
 };
 
 #endif /* PID_H */
