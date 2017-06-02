@@ -35,13 +35,9 @@ int main()
   PID pid;
   
   // Init PID Controller with parameters
-  double Kp = 0.085;
-  double Kd = 0.0027;
+  double Kp = 0.08;
+  double Kd = 0.003;
   double Ki = 0.25;
-  
-  /*double Kp = 0.09;
-   double Kd = 0.0025;
-   double Ki = 0.25;*/
   
   pid.Init(Kp, Ki, Kd);
 
@@ -61,11 +57,18 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value;
-          double trottle_value = 0.4;
+          double trottle_value;
+          bool safe_mode = false;
+          int speed_max;
           bool brake_used = false;
           double cte_min = pid.ReturnCteMin();
           double cte_max = pid.ReturnCteMax();
-          int speed_max = 70;
+          if(safe_mode == true) {
+            speed_max = 50;
+          }
+          else {
+            speed_max = 77;
+          }
           
           pid.UpdateError(cte);
           steer_value = pid.ReturnSteerValue();
