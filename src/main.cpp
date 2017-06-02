@@ -35,13 +35,13 @@ int main()
   PID pid;
   
   // Init PID Controller with parameters
-  double Kp = 0.142;
-  double Kd = 0.11;
-  double Ki = 0.015;
+  double Kp = 0.085;
+  double Kd = 0.0027;
+  double Ki = 0.25;
   
-  /*double Kp = 0.152;
-   double Kd = 0.23;
-   double Ki = 0.015;*/
+  /*double Kp = 0.09;
+   double Kd = 0.0025;
+   double Ki = 0.25;*/
   
   pid.Init(Kp, Ki, Kd);
 
@@ -65,7 +65,7 @@ int main()
           bool brake_used = false;
           double cte_min = pid.ReturnCteMin();
           double cte_max = pid.ReturnCteMax();
-          int speed_max = 50;
+          int speed_max = 70;
           
           pid.UpdateError(cte);
           steer_value = pid.ReturnSteerValue();
