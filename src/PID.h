@@ -1,3 +1,11 @@
+/*
+ * PID.h
+ *
+ * Created on: June 02, 2017
+ * Author: Daniel Gattringer
+ * Mail: daniel@gattringer.biz
+ */
+
 #ifndef PID_H
 #define PID_H
 
@@ -17,11 +25,17 @@ private:
   double d_error;
   
   /*
-   * Coefficients
+   * Coefficients (steering control)
    */
   double Kp;
   double Ki;
   double Kd;
+  
+  /*
+   * Coefficients (trottle/brake control)
+   */
+  double Kp_trottle;
+  double Kp_offset_trottle;
 
 public:
   
@@ -38,7 +52,7 @@ public:
   /*
   * Initialize PID.
   */
-  void Init(double Kp, double Ki, double Kd);
+  void Init(double Kp, double Ki, double Kd, double Kp_trottle, double Kp_offset_trottle);
 
   /*
   * Update the PID error variables given cross track error.
@@ -56,12 +70,12 @@ public:
   double ReturnTrottleValue();
   
   /*
-   * TODO
+   * Return the minimum CTE-Value
    */
   double ReturnCteMin();
   
   /*
-   * TODO
+   * Return the maximum CTE-Value
    */
   double ReturnCteMax();
 };

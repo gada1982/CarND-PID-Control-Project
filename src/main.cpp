@@ -1,3 +1,11 @@
+/*
+ * main.cpp
+ *
+ * Created on: June 02, 2017
+ * Author: Daniel Gattringer
+ * Mail: daniel@gattringer.biz
+ */
+
 #include <uWS/uWS.h>
 #include <iostream>
 #include "json.hpp"
@@ -34,12 +42,17 @@ int main()
 
   PID pid;
   
-  // Init PID Controller with parameters
+  // Init PID Controller with parameters for steering control
   double Kp = 0.08;
   double Kd = 0.003;
   double Ki = 0.25;
   
-  pid.Init(Kp, Ki, Kd);
+  // Init PID Controller with parameters for trottle/brake control
+  double Kp_trottle = -0.45;
+  double Kp_offset_trottle = 1.6;
+  
+  // Init the PID controller
+  pid.Init(Kp, Ki, Kd, Kp_trottle, Kp_offset_trottle);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -58,11 +71,20 @@ int main()
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value;
           double trottle_value;
-          bool safe_mode = false;
           int speed_max;
           bool brake_used = false;
           double cte_min = pid.ReturnCteMin();
           double cte_max = pid.ReturnCteMax();
+          
+          /***************************
+           * Configuration of safety-mode which sets a max-speed of 50 miles/h
+           * Set safe-mode = true   ---> for a smooth ride
+           * Set safe-mode = false  ---> to see the car racing and see the limits of the solution
+           *                            This default-value is not useable in all cases.
+           *                            It depands, how much computing power is available.
+           *                            (use safe-mode = true in this cases).
+           ***************************/
+          bool safe_mode = false;
           if(safe_mode == true) {
             speed_max = 50;
           }
@@ -81,11 +103,12 @@ int main()
             brake_used = false;
           }
           
+          // If the speed limit is reached decrease the trottle to hold the speed
           if(speed > speed_max){
             trottle_value = 0.45;
           }
           
-          // DEBUG
+          // Print out some information
           std::cout << "CTE: " << cte << " CTE_min: " << cte_min << " CTE_max: " << cte_max << std::endl;
           std::cout << "Speed: " << speed << std::endl;
           std::cout << "Steering Value: " << steer_value << " Trottle Value: " << trottle_value << " Brake used: " << brake_used << std::endl;
