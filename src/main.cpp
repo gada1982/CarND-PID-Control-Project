@@ -67,7 +67,7 @@ int main()
             speed_max = 50;
           }
           else {
-            speed_max = 77;
+            speed_max = 75;
           }
           
           pid.UpdateError(cte);
