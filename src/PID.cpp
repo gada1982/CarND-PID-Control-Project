@@ -45,6 +45,7 @@ void PID::UpdateError(double cte) {
   
   double dt;
   double current_time = clock();
+  double i_add = 0;
   
   // If the system time was already set for the first time in a previous run use it for dt calculation
   if(time_init_done) {
@@ -77,7 +78,17 @@ void PID::UpdateError(double cte) {
   
   // Integral part (i_error):
   // (i_error) = integral between a desired setpoint and a measured process variable over time
-  i_error += fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2;
+  if(cte >= 0 && previous_cte >= 0) {
+    i_add = fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2;
+  }
+  else if(cte <= 0 && previous_cte <= 0) {
+    i_add = fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2;
+  }
+  else {
+    // Ignore intervalls where one point is negative and one is positive -> small integral amount
+  }
+  
+  i_error += i_add;
   
   // Derivative part (d_error):
   // (d_error) = considers the rate of change of error

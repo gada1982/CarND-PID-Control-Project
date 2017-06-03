@@ -85,11 +85,12 @@ int main()
            *                            (use safe-mode = true in this cases).
            ***************************/
           bool safe_mode = false;
+          
           if(safe_mode == true) {
             speed_max = 50;
           }
           else {
-            speed_max = 75;
+            speed_max = 80;
           }
           
           pid.UpdateError(cte);
