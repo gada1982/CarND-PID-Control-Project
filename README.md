@@ -49,11 +49,11 @@ This has been reworked to the current implementation by including the time betwe
 
 **Integral part**
 
-For intervalls where both points where positive:
+For intervalls where both measurement points where positive:
 
 `i_error += fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2`
 
-For intervalls where both points where negative:
+For intervalls where both measurement points where negative:
 
 `i_error += fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2`
 
