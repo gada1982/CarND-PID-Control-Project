@@ -72,16 +72,16 @@ Only a P controller was used for this purpose. Using a more sophisticated contro
 `p_error = cte`
 
 **Trottle/Brake value**
-A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. 
+A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. Kp_trottle was set to -0.45.
 
 `trottle = (Kp_trottle*(fabs(p_error))) + Kp_offset_trottle;`
 
 ## Reflection
 
 ### Choosing the hyperparameters
-The design of the PID controller was developed the following way: First, a model of the controller was created in Excel, which was fed with test data (after observing the simulator outputs). On this basis, a basic design could be determined which reacts as quickly as possible (Kp), does not oscillate too much (Kd) and at the same time corrects systematic offsets (Ki).
+The design of the PID controller was developed the following way: First, a model of the controller was created in Excel, which was fed with test data (after observing the simulator's output). On this basis, a basic design could be determined which reacts as quickly as possible (Kp), does not oscillate too much (Kd) and at the same time corrects systematic offsets (Ki).
 
-This basis was used in the simulator and gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
+This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
 
 ## Simulation
 Two modes were introduced for the simulation. A safety mode with a maximum speed of 50 miles / h for a smooth ride. And a racing-mode with a maximum speed of 80 miles/h to see the car racing and see the limits of the solution. This default value is not useable in all cases. It depends on how much computing power is available.
