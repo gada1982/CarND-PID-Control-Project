@@ -1,5 +1,5 @@
 # CarND-Controls-PID
-This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and trottle/brake.
+This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and throttle/brake.
 
 ---
 ## PID controller
@@ -59,7 +59,7 @@ For intervalls where both measurement points where negative:
 
 Intervalls where one point was negative and one was positive have been ignored because of the small integral amount, which made the solution easier. This solution adds the summed, linearized amount between two measurements.
 
-### Trottle/Brake Control
+### Throttle/Brake Control
 
 Additional to the steering control a control for throttle and brake was introduced.
 
@@ -71,11 +71,11 @@ Only a P controller was used for this purpose. Using a more sophisticated contro
 
 `p_error = cte`
 
-**Trottle/Brake value**
+**Throttle/Brake value**
 
-A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. Kp_trottle was set to -0.45.
+A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. Kp_throttle was set to -0.45.
 
-`trottle = (Kp_trottle*(fabs(p_error))) + Kp_offset_throttle;`
+`throttle = (Kp_throttle*(fabs(p_error))) + Kp_offset_throttle;`
 
 ## Reflection
 
