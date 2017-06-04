@@ -57,9 +57,10 @@ For intervalls where both points where negative:
 
 `i_error += fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2`
 
-Intervalls where one point is negative and one is positive have been ignored because of the small integral amount, which made the solution easier. This solution adds the summed, linearized amount between two measurements.
+Intervalls where one point was negative and one was positive have been ignored because of the small integral amount, which made the solution easier. This solution adds the summed, linearized amount between two measurements.
 
 ### Trottle/Brake Control
+
 Additional to the steering control a control for throttle and brake was introduced.
 
 This control was mainly used for managing narrow turns. If the cte was getting too high, throttle was decreased and if this was not enough the brakes have been used to reduce speed.
