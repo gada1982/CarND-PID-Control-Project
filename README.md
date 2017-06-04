@@ -1,5 +1,5 @@
 # CarND-Controls-PID
-Self-Driving Car Engineer Nanodegree Program
+This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and trottle/brake.
 
 ---
 ## Implementation Details
@@ -7,24 +7,29 @@ A PID controller is used to minimize an error in the behavior of a technical sys
 
 A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
 
+**The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of the single parts P, I and D):**
+
 ![PID](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/PID%20-%20Udacity.png)
 
 ### Proportional (P) Part of the Controller
 The proportional part of the controller generates an output value that is proportional to the current error. The result can be set by multiplying the error with a constant Kp (the proportional gain). The larger Kp is selected, the faster the controller reacts, but the more the output oscillates.
 
-The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kp):
+**The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kp):**
+
 ![P](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/P%20-%20Wiki.png)
 
 ### Integral (I) Part of the Controller
 The integral part of the controller generates an output value by taking the sum of the instantaneous error over time. The integrated part is necessary to eliminate a possible systematic error of the technical system, which causes a permanent difference between the setpoint value and the current vehicle position. The result can be adjusted by multiplying the error with a constant Ki (the integral gain). The larger Ki is selected, the more the system is driven to the correct setpoint, but the system tends to overshoot.
 
-The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Ki):
+**The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Ki):**
+
 ![I](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/I%20-%20Wiki.png)
 
 ### Derivative (D) Part of the Controller
 The derivative part of the controller produces an output value by determining the slope of the error over time. The result can be adjusted by multiplying the error with a constant Kd (the derivative gain). The larger Kd is selected, the more the oscillating power of the P-part is attenuated.
 
-The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kd):
+**The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kd):**
+
 ![D](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/D%20-%20Wiki.png)
 
 
