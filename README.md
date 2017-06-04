@@ -3,7 +3,7 @@ This project is done as a part of the Nanodegree - Self-Driving Car Engineer pro
 
 ---
 ## PID controller
-A PID controller is used to minimize an error in the behavior of a technical system. In the case of a self-driving car, this error is, for example, the distance between the car's actual position and the position where it should be. This error is called Cross Track Error (CTE).
+A PID controller is used to minimize an error in the behavior of a technical system. In the case of a self-driving car, this error could be, for example, the distance between the car's actual position and the position where it should be. This error is called Cross Track Error (CTE).
 
 A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
 
