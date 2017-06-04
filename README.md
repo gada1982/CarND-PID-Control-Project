@@ -2,7 +2,22 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Implementation Details
+A PID controller is used to minimize an error in the behavior of a technical system. In the case of a self-driving car, this error is, for example, the distance between the car's actual position and the position where it should be. This error is called Cross Track Error (CTE).
 
+A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
+
+### Proportional (P) Part of the Controller
+The proportional part of the controller generates an output value that is proportional to the current error. The result can be set by multiplying the error with a constant Kp (the proportional gain). The larger Kp is selected, the faster the controller reacts, but the more the output oscillates.
+
+### Integral (I) Part of the Controller
+The integral part of the controller generates an output value by taking the sum of the instantaneous error over time. The integrated part is necessary to eliminate a possible systematic error of the technical system, which causes a permanent difference between the setpoint value and the current vehicle position. The result can be adjusted by multiplying the error with a constant Ki (the integral gain). The larger Ki is selected, the more the system is driven to the correct setpoint, but the system tends to overshoot.
+
+### Derivative (D) Part of the Controller
+The derivative part of the controller produces an output value by determining the slope of the error over time. The result can be adjusted by multiplying the error with a constant Kd (the derivative gain). The larger Kd is selected, the more the oscillating power of the P-part is attenuated.
+
+
+---
 ## Dependencies
 
 * cmake >= 3.5
