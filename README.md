@@ -2,7 +2,7 @@
 This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and trottle/brake.
 
 ---
-## Implementation Details
+## PID controller
 A PID controller is used to minimize an error in the behavior of a technical system. In the case of a self-driving car, this error is, for example, the distance between the car's actual position and the position where it should be. This error is called Cross Track Error (CTE).
 
 A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
@@ -31,6 +31,28 @@ The derivative part of the controller produces an output value by determining th
 **The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kd):**
 
 ![D](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/D%20-%20Wiki.png)
+
+## Implementation Details
+Within the lectures the following calculation was done to get the single errors `p_error = cte`, `d_error = cte - prev_cte` and `i_error = i_error + cte`.
+
+This has been reworked to the current implementation by including the time between the single measurements (dt) and by introducing a better fitting solution for the integral part.
+
+**Proportional part**
+`p_error = cte`
+
+**Derivative part**
+`d_error = (cte - prev_cte) / dt`
+
+**Integral part**
+`if(cte >= 0 && previous_cte >= 0) {
+    i_add = fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2;
+  }
+  else if(cte <= 0 && previous_cte <= 0) {
+    i_add = fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2;
+  }`
+
+Intervalls where one point is negative and one is positive have been ignored because of the small integral amount, which made the solution easier.
+
 
 
 ---
