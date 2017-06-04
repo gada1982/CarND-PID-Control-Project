@@ -38,18 +38,20 @@ Within the lectures the following calculation was done to get the single errors 
 This has been reworked to the current implementation by including the time between the single measurements (dt) and by introducing a better fitting solution for the integral part.
 
 **Proportional part**
+
 `p_error = cte`
 
 **Derivative part**
+
 `d_error = (cte - prev_cte) / dt`
 
 **Integral part**
-`if(cte >= 0 && previous_cte >= 0) {
-    i_add = fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2;
-  }
-  else if(cte <= 0 && previous_cte <= 0) {
-    i_add = fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2;
-  }`
+
+For intervalls where both points where positive:
+`i_error += fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2`
+
+For intervalls where both points where negative:
+`i_error += fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2`
 
 Intervalls where one point is negative and one is positive have been ignored because of the small integral amount, which made the solution easier.
 
