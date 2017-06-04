@@ -97,7 +97,7 @@ The system behavior was comprehensible and corresponded to what was to be expect
 An already built solution with the useage of twiddle for parameter tuning was not used, because the different driving situations in the simulator varied too strongly to get a reliable result. Anyway, this gave some hints for manual parameter tuning.
 
 ## Simulation
-Two modes were introduced for the simulation. A safety mode with a maximum speed of 50 miles / h for a smooth ride. And a racing-mode with a maximum speed of 80 miles/h to see the car racing and see the limits of the solution. This default value is not useable in all cases. It depends on how much computing power is available.
+Two modes were introduced for the simulation. A safety mode with a maximum speed of 50 miles/h for a smooth ride. And a racing-mode with a maximum speed of 80 miles/h to see the car racing and see the limits of the solution. This default value is not useable in all cases. It depends on how much computing power is available. For both modes the same controller has been used.
 
 The usage of the safety-mode can be configured in `main.cpp` by setting a boolean flag.
 
