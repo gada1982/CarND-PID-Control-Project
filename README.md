@@ -84,9 +84,6 @@ The design of the PID controller was developed the following way: First, a model
 
 This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
 
-This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
-This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
-
 The system behavior was comprehensible and corresponded to what was to be expected from the theoretical derivation on the basis of the model.
 
 **Final Hyperparameters Steering**
