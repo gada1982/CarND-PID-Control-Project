@@ -72,6 +72,7 @@ Only a P controller was used for this purpose. Using a more sophisticated contro
 `p_error = cte`
 
 **Trottle/Brake value**
+
 A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. Kp_trottle was set to -0.45.
 
 `trottle = (Kp_trottle*(fabs(p_error))) + Kp_offset_throttle;`
