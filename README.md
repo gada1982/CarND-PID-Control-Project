@@ -7,7 +7,7 @@ A PID controller is used to minimize an error in the behavior of a technical sys
 
 A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
 
-**The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of the single parts P, I and D):**
+**The following picture (taken from [UDACITY](https://www.udacity.com/) shows the influence of the single parts P, I and D):**
 
 ![PID](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/PID%20-%20Udacity.png)
 
