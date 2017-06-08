@@ -18,38 +18,38 @@ using namespace std;
 */
 
 PID::PID() {
-  d_error = 0;
-  p_error = 0;
-  i_error = 0;
+  d_error = 0.0;
+  p_error = 0.0;
+  i_error = 0.0;
+  
+  cte_count = 100;
+  cte_values = new double[cte_count];
 }
 
-PID::~PID() {}
+PID::~PID() {
+  delete cte_values;
+}
 
-void PID::Init(double Kp, double Ki, double Kd, double offset) {
+void PID::Init(double Kp, double Ki, double Kd) {
   // Init values (steering control)
   this->Kp = Kp;
   this->Ki = Ki;
   this->Kd = Kd;
   
-  this->offset = offset;
+  steer_min_max_init = false;
   
   cte_min = 10.0;
-  cte_max = 0.0;
+  cte_max = -10.0;
+  
+  for(int i=0; i<cte_count; i++){
+    cte_values[i] = 0.0;
+  }
+  
+  steer_min = 10.0;
+  steer_max = -10.0;
 }
 
 void PID::UpdateError(double cte) {
-  // IMPORTANT: These errors are used for controlling the steering and trottle/brake values
-  
-  // Set the minimum value for CTE -> Used for analysis
-  if(cte < cte_min) {
-    cte_min = cte;
-  }
-  
-  // Set the maximum value for CTE -> Used for analysis
-  if(cte > cte_max) {
-    cte_max = cte;
-  }
-  
   // Calculate the error values of the PID controller
   // Proportional part
   // (p_error) = difference between a desired setpoint and a measured process variable
@@ -65,50 +65,86 @@ void PID::UpdateError(double cte) {
   
   // Set previous_cte for the next run of UpdateError()
   previous_cte = cte;
+  
+  if(steer_min_max_init == false && cte > -0.5 && cte < 0.5) {
+    steer_min_max_init = true;
+  }
+  
+  // Set the minimum value for CTE -> used for analysis
+  if(cte < cte_min) {
+    cte_min = cte;
+  }
+  
+  // Set the maximum value for CTE -> used for analysis
+  if(cte > cte_max) {
+    cte_max = cte;
+  }
+
+  // Set the average value for CTE -> used for analysis
+  addElementToArray(cte);
+  cte_avg = avgArray();
 }
 
 double PID::TotalError() {
-  double total_error;
+  double steer;
   
   // Calculate the new value for the PID controller for the steering value
-  total_error = -Kp*p_error - Kd*d_error - Ki*i_error;
+  steer = -Kp*p_error - Kd*d_error - Ki*i_error;
   
   // Normalize within [-1, 1]
-  if (fabs(total_error)>1.0){
-    if (total_error > 0){
-      total_error = 1.0;
+  if (fabs(steer)>1.0){
+    if (steer > 0){
+      steer = 1.0;
     } else {
-      total_error = -1.0;
+      steer = -1.0;
     }
   }
   
-  return total_error;
-}
+  // Set the minimum steering value -> Used for analysis
+  if(steer_min_max_init == true && steer < steer_min) {
+    steer_min = steer;
+  }
+  
+  // Set the maximum steering value -> Used for analysis
+  if(steer_min_max_init == true && steer > steer_max) {
+    steer_max = steer;
+  }
 
-/*double PID::ReturnTrottleValue() {
-  double trottle;
-  
-  // Calculate the new value for the PID controller for the trottle/brake value
-  trottle = (Kp_trottle*(fabs(p_error))) + Kp_offset_trottle;
-  
-  // Normalize within [-1, 1]
-  if (fabs(trottle)>1.0){
-    if (trottle > 0){
-      trottle = 1.0;
-    } else {
-      trottle = -1.0;
-    }
-  }
-  return trottle;
-}*/
+  return steer;
+}
 
 double PID::ReturnCteMin() {
   return cte_min;
+}
+
+double PID::ReturnCteAvg() {
+  return cte_avg;
 }
 
 double PID::ReturnCteMax() {  
   return cte_max;
 }
 
+double PID::ReturnSteerMin() {
+  return steer_min;
+}
 
+double PID::ReturnSteerMax() {
+  return steer_max;
+}
+
+double PID::avgArray(){
+  double sum = 0.0;
+  for(int i=0; i<cte_count; i++){
+    sum+=cte_values[i];
+  }
+  return sum/cte_count;
+}
+
+void PID::addElementToArray(double cte) {
+  for(int i=0; i<cte_count-1; i++){
+    cte_values[i] = cte_values[i+1];
+  }
+  cte_values[cte_count-1] = cte;
+}
 
