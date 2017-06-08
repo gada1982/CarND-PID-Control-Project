@@ -34,10 +34,8 @@ The derivative part of the controller produces an output value by determining th
 
 ## Implementation Details
 
-### Steering Control
-Within the lectures the following calculation was done to get the single errors `p_error = cte`, `d_error = cte - prev_cte` and `i_error = i_error + cte`.
-
-This has been reworked to the current implementation by including the time between the single measurements (dt) and by introducing a better fitting solution for the integral part.
+### Error Calculation
+The single error of the PID controller have been calculated the following way:
 
 **Proportional part**
 
@@ -45,37 +43,16 @@ This has been reworked to the current implementation by including the time betwe
 
 **Derivative part**
 
-`d_error = (cte - prev_cte) / dt`
+`d_error = cte - prev_cte`
 
 **Integral part**
 
-For intervalls where both measurement points where positive:
+`i_error += cte`
 
-`i_error += fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2`
+**Total error**
+The total error has been calculated the following way: 
 
-For intervalls where both measurement points where negative:
-
-`i_error += fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2`
-
-Intervalls where one point was negative and one was positive have been ignored because of the small integral amount, which made the solution easier. This solution adds the summed, linearized amount between two measurements.
-
-### Throttle/Brake Control
-
-Additional to the steering control a control for throttle and brake was introduced.
-
-This control was mainly used for managing narrow turns. If the cte was getting too high, throttle was decreased and if this was not enough the brakes have been used to reduce speed.
-
-Only a P controller was used for this purpose. Using a more sophisticated controller concept could be an option for further improvements. 
-
-**Proportional part**
-
-`p_error = cte`
-
-**Throttle/Brake value**
-
-A throttle value between [0, 1] produces acceleration, the higher the stronger. A throttle value between [0, -1] activates the brakes. Kp_throttle was set to -0.45.
-
-`throttle = (Kp_throttle*(fabs(p_error))) + Kp_offset_throttle;`
+`steer = -Kp*p_error - Kd*d_error - Ki*i_error;`
 
 ## Reflection
 
@@ -88,22 +65,12 @@ The system behavior was comprehensible and corresponded to what was to be expect
 
 **Final Hyperparameters Steering**
 
-`Kp = 0.08`, `Ki = 0.25` and `kd = 0.003`
-
-**Final Hyperparameters Throttle/Brake**
-
-`Kp_trottle = -0.45` and `Kp_offset_throttle = 1.6`
+`Kp = 0.11`, `Ki = 0.0008` and `Kd = 2.5`
 
 An already built solution with the useage of twiddle for parameter tuning was not used, because the different driving situations in the simulator varied too strongly to get a reliable result. Anyway, this gave some hints for manual parameter tuning.
 
 ## Simulation
-Two modes were introduced for the simulation. A safety mode with a maximum speed of 50 miles/h for a smooth ride. And a racing-mode with a maximum speed of 80 miles/h to see the car racing and see the limits of the solution. This default value is not useable in all cases. It depends on how much computing power is available. For both modes the same controller has been used.
-
-The usage of the safety-mode can be configured in `main.cpp` by setting a boolean flag.
-
-With enough computing power the model manages passing the track in both modes.
-
-The following video shows the [safety-mode](https://youtu.be/YoQdm8YqNOY)
+The following [video] shows the the implemented PID controller to successfully drive two laps.
 
 ---
 ## Dependencies
