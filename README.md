@@ -2,7 +2,7 @@
 This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and throttle/brake.
 
 ---
-## PID controller
+## PID Controller
 A PID controller is used to minimize an error in the behavior of a technical system. In the case of a self-driving car, this error could be, for example, the distance between the car's actual position and the position where it should be. This error is called Cross Track Error (CTE).
 
 A PID controller (Proportional-Integral-Derivative-Controller) consists of three parts and each of them must fulfill a certain measure, so that the entire system works properly.
@@ -12,7 +12,7 @@ A PID controller (Proportional-Integral-Derivative-Controller) consists of three
 ![PID](https://github.com/gada1982/CarND-PID-Control-Project/blob/master/data_for_readme/PID%20-%20Udacity.png)
 
 ### Proportional (P) Part of the Controller
-The proportional part of the controller generates an output value that is proportional to the current error. The result can be set by multiplying the error with a constant Kp (the proportional gain). The larger Kp is selected, the faster the controller reacts, but the more the output oscillates.
+The proportional part of the controller produces an output value that is directly proportional to the current error. This means the greater the deviation, the stronger is counter-steered. The result can be set by multiplying the error with a constant Kp (the proportional gain). The larger Kp is selected, the faster and stronger the controller reacts, but the more the output oscillates because of overshooting.
 
 **The following picture (taken from [WIKIPEDIA](https://en.wikipedia.org/wiki/PID_controller) shows the influence of Kp):**
 
@@ -35,35 +35,35 @@ The derivative part of the controller produces an output value by determining th
 ## Implementation Details
 
 ### Error Calculation
-The single error of the PID controller have been calculated the following way:
+The single errors of the PID controller have been calculated the following way:
 
-**Proportional part**
+**Proportional Part**
 
 `p_error = cte`
 
-**Derivative part**
+**Derivative Part**
 
 `d_error = cte - prev_cte`
 
-**Integral part**
+**Integral Part**
 
 `i_error += cte`
 
-**Total error**
+**Total Error**
 The total error has been calculated the following way: 
 
 `steer = -Kp*p_error - Kd*d_error - Ki*i_error;`
 
 ## Reflection
 
-### Choosing the hyperparameters
+### Choosing the Hyperparameters
 The design of the PID controller was developed the following way: First, a model of the controller was created in Excel, which was fed with test data (after observing the simulator's output). On this basis, a basic design could be determined which reacts as quickly as possible (Kp), does not oscillate too much (Kd) and at the same time corrects systematic offsets (Ki).
 
 This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
 
 The system behavior was comprehensible and corresponded to what was to be expected from the theoretical derivation on the basis of the model.
 
-**Final Hyperparameters Steering**
+**Final Hyperparameters**
 
 `Kp = 0.11`, `Ki = 0.0008` and `Kd = 2.5`
 
