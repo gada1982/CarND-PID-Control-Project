@@ -58,7 +58,7 @@ The total error has been calculated the following way:
 ## Reflection
 
 ### Choosing the Hyperparameters
-The design of the PID controller was developed the following way: First, a model of the controller was created in Excel, which was fed with test data (after observing the simulator's output). On this basis, a basic design could be determined which reacts as quickly as possible (Kp), does not oscillate too much (Kd) and at the same time corrects systematic offsets (Ki).
+The design of the PID controller was developed the following way: First, a model of the controller was created in Excel, which was fed with test data (after observing the simulator's output). On this basis, a basic design could be determined which reacts as quickly as possible (Kp), does not oscillate too much (Kd) and at the same time corrects systematic offsets without adding to much oscillation effects to the system (Ki).
 
 This basis was used in the simulator and was gradually, manually optimized. Kp was increased step by step to obtain a sufficiently fast response for narrow curves. When the system oscillated too much Kd was increased. Ki was chosen as small as possible without losing the correction of a systematic error.
 
