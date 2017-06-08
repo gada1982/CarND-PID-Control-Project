@@ -50,6 +50,7 @@ The single errors of the PID controller have been calculated the following way:
 `i_error += cte`
 
 **Total Error**
+
 The total error has been calculated the following way: 
 
 `steer = -Kp*p_error - Kd*d_error - Ki*i_error;`
