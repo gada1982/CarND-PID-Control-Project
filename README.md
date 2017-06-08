@@ -1,5 +1,5 @@
 # CarND-Controls-PID
-This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting steering angle and throttle/brake.
+This project is done as a part of the Nanodegree - Self-Driving Car Engineer provided by Udacity. The scope of this project is the implementation of a PID controller, which allows a car (in a simulator) to follow the given track by adjusting the steering angle.
 
 ---
 ## PID Controller
