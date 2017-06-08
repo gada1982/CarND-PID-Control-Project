@@ -70,7 +70,7 @@ The system behavior was comprehensible and corresponded to what was to be expect
 An already built solution with the useage of twiddle for parameter tuning was not used, because the different driving situations in the simulator varied too strongly to get a reliable result. Anyway, this gave some hints for manual parameter tuning.
 
 ## Simulation
-The following [video] shows the the implemented PID controller to successfully drive two laps.
+The following [video](https://youtu.be/PULLG0IxSUU) shows a car, controlled by the implemented PID controller, successfully driving on a given track.
 
 ---
 ## Dependencies
