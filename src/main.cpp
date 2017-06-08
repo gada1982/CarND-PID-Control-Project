@@ -36,25 +36,45 @@ std::string hasData(std::string s) {
   return "";
 }
 
-int main()
+int main(int argc, const char *argv[])
 {
   uWS::Hub h;
 
-  PID pid;
+  PID pid_steer;
+  PID pid_throttle;
   
   // Init PID Controller with parameters for steering control
-  double Kp = 0.08;
-  double Kd = 0.003;
-  double Ki = 0.25;
+  double Kp_steer;
+  double Kd_steer;
+  double Ki_steer;
   
   // Init PID Controller with parameters for trottle/brake control
   double Kp_trottle = -0.45;
   double Kp_offset_trottle = 1.6;
   
-  // Init the PID controller
-  pid.Init(Kp, Ki, Kd, Kp_trottle, Kp_offset_trottle);
+  if(argc == 1) {
+    // Set default values if no parameter is given
+    Kp_steer = 0.2;
+    Ki_steer = 0.001;
+    Kd_steer = 3.0;
+  }
+  else if (argc == 4) {
+    // Set parameter values from terminal input
+    Kp_steer = strtod(argv[1], NULL);
+    Ki_steer = strtod(argv[2], NULL);
+    Kd_steer = strtod(argv[3], NULL);
+  } else {
+    std::cout << "Usage: ./pid kp ki kd " << std::endl;
+    return -1 ;
+  }
+  
+  // Init the PID controller for steering
+  pid_steer.Init(Kp_steer, Ki_steer, Kd_steer, 0.0);
+  
+  // Init the PID controller for throttle
+  pid_throttle.Init(Kp_trottle, 0.0, 0.0, Kp_offset_trottle);
 
-  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
+  h.onMessage([&pid_steer, &pid_throttle](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
@@ -70,11 +90,11 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value;
-          double trottle_value;
+          double trottle_value = 1.0;
           int speed_max;
           bool brake_used = false;
-          double cte_min = pid.ReturnCteMin();
-          double cte_max = pid.ReturnCteMax();
+          double cte_min = pid_steer.ReturnCteMin();
+          double cte_max = pid_steer.ReturnCteMax();
           
           /***************************
            * Configuration of safety-mode which sets a max-speed of 50 miles/h
@@ -84,18 +104,18 @@ int main()
            *                            It depands, how much computing power is available.
            *                            (use safe-mode = true in this cases).
            ***************************/
-          bool safe_mode = false;
+          bool safe_mode = true;
           
           if(safe_mode == true) {
-            speed_max = 50;
+            speed_max = 40;
           }
           else {
             speed_max = 80;
           }
           
-          pid.UpdateError(cte);
-          steer_value = pid.ReturnSteerValue();
-          trottle_value = pid.ReturnTrottleValue();
+          pid_steer.UpdateError(cte);
+          steer_value = pid_steer.TotalError();
+          //trottle_value = pid.ReturnTrottleValue();
           
           if(trottle_value < 0) {
             brake_used = true;
@@ -106,7 +126,7 @@ int main()
           
           // If the speed limit is reached decrease the trottle to hold the speed
           if(speed > speed_max){
-            trottle_value = 0.45;
+            trottle_value = 0.35;
           }
           
           // Print out some information

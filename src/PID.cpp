@@ -25,41 +25,20 @@ PID::PID() {
 
 PID::~PID() {}
 
-void PID::Init(double Kp, double Ki, double Kd, double Kp_trottle, double Kp_offset_trottle) {
+void PID::Init(double Kp, double Ki, double Kd, double offset) {
   // Init values (steering control)
   this->Kp = Kp;
   this->Ki = Ki;
   this->Kd = Kd;
   
-  // Init values (trottle/brake control)
-  this->Kp_trottle = Kp_trottle;
-  this->Kp_offset_trottle = Kp_offset_trottle;
+  this->offset = offset;
   
-  time_init_done = false;
   cte_min = 10.0;
   cte_max = 0.0;
 }
 
 void PID::UpdateError(double cte) {
   // IMPORTANT: These errors are used for controlling the steering and trottle/brake values
-  
-  double dt;
-  double current_time = clock();
-  double i_add = 0;
-  
-  // If the system time was already set for the first time in a previous run use it for dt calculation
-  if(time_init_done) {
-    dt = (current_time - previous_time)/CLOCKS_PER_SEC;
-  }
-  else { // First run of UpdateError()
-    dt = 0.001;
-    time_init_done = true;
-    previous_cte = cte;
-  }
-  
-  previous_time = current_time;
-  
-  cout << "\ndt: " << dt << endl;
   
   // Set the minimum value for CTE -> Used for analysis
   if(cte < cte_min) {
@@ -78,45 +57,35 @@ void PID::UpdateError(double cte) {
   
   // Integral part (i_error):
   // (i_error) = integral between a desired setpoint and a measured process variable over time
-  if(cte >= 0 && previous_cte >= 0) {
-    i_add = fmin(cte, previous_cte)*dt + ((fabs(cte - previous_cte))*dt)/2;
-  }
-  else if(cte <= 0 && previous_cte <= 0) {
-    i_add = fmax(cte, previous_cte)*dt - ((fabs(cte - previous_cte))*dt)/2;
-  }
-  else {
-    // Ignore intervalls where one point is negative and one is positive -> small integral amount
-  }
-  
-  i_error += i_add;
+  i_error += cte;
   
   // Derivative part (d_error):
   // (d_error) = considers the rate of change of error
-  d_error = (cte - previous_cte) / dt;
+  d_error = cte - previous_cte;
   
   // Set previous_cte for the next run of UpdateError()
   previous_cte = cte;
 }
 
-double PID::ReturnSteerValue() {
-  double steer;
+double PID::TotalError() {
+  double total_error;
   
   // Calculate the new value for the PID controller for the steering value
-  steer = -Kp*p_error - Kd*d_error - Ki*i_error;
+  total_error = -Kp*p_error - Kd*d_error - Ki*i_error;
   
   // Normalize within [-1, 1]
-  if (fabs(steer)>1.0){
-    if (steer > 0){
-      steer = 1.0;
+  if (fabs(total_error)>1.0){
+    if (total_error > 0){
+      total_error = 1.0;
     } else {
-      steer = -1.0;
+      total_error = -1.0;
     }
   }
   
-  return steer;
+  return total_error;
 }
 
-double PID::ReturnTrottleValue() {
+/*double PID::ReturnTrottleValue() {
   double trottle;
   
   // Calculate the new value for the PID controller for the trottle/brake value
@@ -131,7 +100,7 @@ double PID::ReturnTrottleValue() {
     }
   }
   return trottle;
-}
+}*/
 
 double PID::ReturnCteMin() {
   return cte_min;

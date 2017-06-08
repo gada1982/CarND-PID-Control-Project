@@ -11,8 +11,6 @@
 
 class PID {
 private:
-  double previous_time;
-  bool time_init_done;
   double previous_cte;
   double cte_min;
   double cte_max;
@@ -25,17 +23,12 @@ private:
   double d_error;
   
   /*
-   * Coefficients (steering control)
+   * Coefficients 
    */
   double Kp;
   double Ki;
   double Kd;
-  
-  /*
-   * Coefficients (trottle/brake control)
-   */
-  double Kp_trottle;
-  double Kp_offset_trottle;
+  double offset;
 
 public:
   
@@ -52,22 +45,17 @@ public:
   /*
   * Initialize PID.
   */
-  void Init(double Kp, double Ki, double Kd, double Kp_trottle, double Kp_offset_trottle);
+  void Init(double Kp, double Ki, double Kd, double offset);
 
   /*
-  * Update the PID error variables given cross track error.
-  */
+   * Update the PID error variables given cross track error.
+   */
   void UpdateError(double cte);
-
-  /*
-  * Calculate the total PID error -> SteerValue.
-  */
-  double ReturnSteerValue();
   
   /*
-   * Calculate the total P error and modifies it -> TrottleValue.
+   * Calculate the total PID error.
    */
-  double ReturnTrottleValue();
+  double TotalError();
   
   /*
    * Return the minimum CTE-Value
